@@ -1,0 +1,9 @@
+server:
+  port: 8084
+
+spring:
+  datasource:
+    username: test
+    password: test
+  jpa:
+    show-sql: true

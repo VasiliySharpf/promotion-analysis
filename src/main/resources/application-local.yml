@@ -1,0 +1,12 @@
+server:
+  port: 8084
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/promotion_analysis
+    username: postgres
+    password: postgres
+  jpa:
+    show-sql: false
+  liquibase:
+    enabled: true

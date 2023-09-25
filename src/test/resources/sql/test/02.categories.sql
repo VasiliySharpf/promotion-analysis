@@ -1,0 +1,23 @@
+INSERT INTO promo.categories (code, name)
+VALUES
+    (191011, 'Category 06'),
+    (191013, 'Category 07'),
+    (191014, 'Category 12'),
+    (191015, 'Category 14'),
+    (191017, 'Category 10'),
+    (191018, 'Category 11'),
+    (191020, 'Category 05'),
+    (191022, 'Category 15'),
+    (191025, 'Category 08'),
+    (191026, 'Category 17'),
+    (191110, 'Category 04'),
+    (191111, 'Category 06'),
+    (191112, 'Category 16'),
+    (191116, 'Category 01'),
+    (191119, 'Category 03'),
+    (191121, 'Category 13'),
+    (191123, 'Category 02'),
+    (211224, 'Category 09'),
+    (211310, 'Category 04'),
+    (211311, 'Category 06'),
+    (211323, 'Category 02');
