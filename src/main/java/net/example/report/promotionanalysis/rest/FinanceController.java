@@ -1,6 +1,7 @@
 package net.example.report.promotionanalysis.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.example.report.promotionanalysis.model.dto.PageRequestDto;
@@ -11,10 +12,13 @@ import net.example.report.promotionanalysis.service.PriceService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.Objects.nonNull;
 
 @Slf4j
 @RestController
@@ -31,13 +35,13 @@ public class FinanceController {
 
         log.info("Request [GET] /finance/prices materialCode={}, chainName={}", materialCode, chainName);
         List<PriceDto> prices = new ArrayList<>();
-        if (materialCode != null && !chainName.isBlank()) {
+        if (nonNull(materialCode) && nonNull(chainName)) {
             priceService.findPriceBy(materialCode, chainName).ifPresent(prices::add);
 
-        } else if (materialCode != null) {
+        } else if (nonNull(materialCode)) {
             prices = priceService.findAllPricesBy(materialCode);
 
-        } else if (!chainName.isBlank()) {
+        } else if (nonNull(chainName)) {
             prices = priceService.findAllPricesBy(chainName);
         } else {
             return ResponseEntity.badRequest().body("Должен быть заполнен хотя бы один параметр запроса.");
@@ -48,7 +52,7 @@ public class FinanceController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/prices/all")
     @Operation(summary = "Постраничное получение всех цен.")
-    public PageResponse<PriceDto> findAll(PageRequestDto pageRequest) {
+    public PageResponse<PriceDto> findAll(@NotNull PageRequestDto pageRequest) {
         log.info("Request [GET] /finance/prices pageRequest={}", pageRequest);
         return PageResponse.of(
                 priceService.findAll(PageRequest.of(pageRequest.page(), pageRequest.size())));
@@ -57,14 +61,14 @@ public class FinanceController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/prices")
     @Operation(summary = "Регистрация новой цены.")
-    public void registerNewPrice(@RequestBody PriceDto priceDto) {
+    public void registerNewPrice(@RequestBody @Validated PriceDto priceDto) {
         log.info("Request [POST] /finance/prices priceDto={}", priceDto);
         priceService.registerNewPrice(priceDto);
     }
 
     @PutMapping("/prices")
     @Operation(summary = "Обновление цены по наименованию сети и коду продукта.")
-    public ResponseEntity<?> updatePrice(@RequestBody PriceDto priceDto) {
+    public ResponseEntity<?> updatePrice(@RequestBody @Validated PriceDto priceDto) {
         log.info("Request [PUT] /finance/prices priceDto={}", priceDto);
         return priceService.updatePrice(priceDto)
                 ? ResponseEntity.ok().build()

@@ -6,6 +6,7 @@ import net.example.report.promotionanalysis.exception.PriceRegistrationException
 import net.example.report.promotionanalysis.exception.ProductNotFoundException;
 import net.example.report.promotionanalysis.model.dto.ErrorDto;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -15,20 +16,17 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ExceptionHandlerController {
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(ChainNotFoundException.class)
-    public ErrorDto processingException(ChainNotFoundException ex) {
+    @ExceptionHandler({
+            ChainNotFoundException.class,
+            ProductNotFoundException.class,
+            PriceRegistrationException.class})
+    public ErrorDto processingException(RuntimeException ex) {
         return errorMessage(ex);
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(ProductNotFoundException.class)
-    public ErrorDto processingException(ProductNotFoundException ex) {
-        return errorMessage(ex);
-    }
-
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(PriceRegistrationException.class)
-    public ErrorDto processingException(PriceRegistrationException ex) {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ErrorDto processingException(MethodArgumentNotValidException ex) {
         return errorMessage(ex);
     }
 
